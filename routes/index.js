@@ -11,18 +11,22 @@ router.get('/', function(req, res, next) {
 	var thisBurger;
 	var burgerName;
 
-	Model.burger.findAll().then(burgers => {
-  		// console.log(burgers[0].dataValues)
-  		for(var burger in burgers){
-  			thisBurger = burgers[burger].dataValues
-  			burgerName = thisBurger.burger_name
-  			if (thisBurger.devoured) {
-  				devouredBurgers.push(burgerName);
-  			}else{
-  				availableBurgers.push(burgerName);
-  			}
-  		}
-  	});
+	Model.burger
+		.findAll()
+		.then(burgers => {
+
+	  		for(var burger in burgers){
+	  			thisBurger = burgers[burger].dataValues
+	  			burgerName = thisBurger.burger_name
+	  			if (thisBurger.devoured) {
+	  				devouredBurgers.push(burgerName);
+	  			}else{
+	  				availableBurgers.push(burgerName);
+	  			}
+	  		}
+  			
+  			res.render('index', {devouredBurgers : devouredBurgers, availableBurgers : availableBurgers});
+  		});
 });
 
 module.exports = router;
