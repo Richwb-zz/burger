@@ -3,6 +3,18 @@ extends layout
 block content
 	p Welcome to #{title}
 	#{burgers}
+	p Ate
+	
+	ul
+		each val in devouredBurgers
+			li= val
+
+	p available
+
+	ul
+		each val in availableBurgers
+			li= val
+
 	form(name="add-burger" method="post" action="/api/create")
 		label(for="burger-name") Add Burger:
 		input(type="text",name="burger-name",value="")
