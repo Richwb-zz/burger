@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	p Welcome to #{title}
+	#{burgers}
+	form(name="add-burger" method="post" action="/api/create")
+		label(for="burger-name") Add Burger:
+		input(type="text",name="burger-name",value="")
+		input(type="submit" value="submit")
