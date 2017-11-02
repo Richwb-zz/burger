@@ -52,10 +52,16 @@ function getBurgers(res, burgerError=""){
 	  		for(var burger in burgers){
 	  			thisBurger = burgers[burger].dataValues
 	  			burgerName = thisBurger.burger_name
-	  			if (thisBurger.devoured) {
-	  				devouredBurgers.push(burgerName);
-	  			}else{
-	  				availableBurgers.push(burgerName);
+
+
+	  			if (thisBurger.devoured > 0) {
+	  				devouredBurgers.push([burgerName, thisBurger.devoured]);
+	  			}
+
+	  			if(thisBurger.count > thisBurger.devoured){
+	  				var availableCount = thisBurger.count - thisBurger.devoured;
+	  				
+	  				availableBurgers.push([burgerName, availableCount]);
 	  			}
 	  		}
   			
@@ -74,7 +80,7 @@ function findBurger(res, findBurger){
 			if(burger.length === 0){
 				addBurger(res, findBurger);
 			}else{
-				// updateBurger();
+				updateBurger(res, burger[0].dataValues);
 			}
 		});
 }
@@ -91,11 +97,18 @@ function addBurger(res, addBurger){
 		});
 }
 
-function updateBurger(){
-// 	Model.burger
-// 		.update({
-// 			count
-// 		})
+function updateBurger(res, updateBurger){
+	Model.burger
+		.update({
+			count : ++updateBurger.count
+		}, {
+			where: {
+				id : updateBurger.id
+			}
+		})
+		.then(() => {
+			getBurgers(res);
+		});
 }
 
 module.exports = router;
