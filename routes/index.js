@@ -2,6 +2,7 @@ var express = require('express');
 var router 	= express.Router();
 var klef		= require('../server/burger.js');
 var Model 	= require('../models/index.js');
+var Promise = require('bluebird');
 
 
 /* GET home page. */
@@ -11,19 +12,29 @@ router.get("/", function(req, res, next) {
 
 router.post("/api/eat/:burgerate", function(req, res, next) {
 	var burgerAte = decodeURI(req["url"].replace("/api/eat/",""));
-
+	var thisBurger;
+	
 	Model.burger
-		.update(
-			{
-				devoured: true
-			},
-			{
-				where: {burger_name: burgerAte}
+		.findAll({
+			where: {
+				burger_name: burgerAte
 			}
-		)
-		.then(() => {
-			getBurgers(res);
-		});
+		})
+		.then(burger => {
+			console.log("test");
+			thisBurger = burger[0].dataValues
+			Model.burger
+				.update({
+					devoured: thisBurger.devoured + 1,
+					count: thisBurger.count - 1
+				},
+				{
+					where: {id: thisBurger.id}
+				})
+				.then(() => {
+					getBurgers(res);
+				});
+		});	
 });
 
 router.post("/api/addburger", function(req,res,next) {
@@ -39,7 +50,6 @@ router.post("/api/addburger", function(req,res,next) {
 });
 
 function getBurgers(res, burgerError=""){
-	console.log("test");
 	var devouredBurgers  = [];
 	var availableBurgers = [];
 	var thisBurger;
@@ -86,7 +96,6 @@ function findBurger(res, findBurger){
 }
 
 function addBurger(res, addBurger){
-	console.log(addBurger);
 	Model.burger
 		.build({
 			burger_name: addBurger,
