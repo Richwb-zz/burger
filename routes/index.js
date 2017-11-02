@@ -34,19 +34,12 @@ router.post("/api/addburger", function(req,res,next) {
 		burgerError = "Burger name cannot be blank";
 		getBurgers(res, burgerError);
 	}else{
-
-		Model.burger
-			.build({
-				burger_name: addBurger
-			})
-			.save()
-			.then(() => {
-				getBurgers(res, burgerError);
-			});
+		findBurger(res, addBurger);
 	}
 });
 
 function getBurgers(res, burgerError=""){
+	console.log("test");
 	var devouredBurgers  = [];
 	var availableBurgers = [];
 	var thisBurger;
@@ -68,6 +61,41 @@ function getBurgers(res, burgerError=""){
   			
   			res.render("index", {devouredBurgers : devouredBurgers, availableBurgers : availableBurgers, burgerError : burgerError});
   		});
+}
+
+function findBurger(res, findBurger){
+	Model.burger
+		.findAll({
+			where: {
+				burger_name: findBurger
+			}
+		})
+		.then(burger => {
+			if(burger.length === 0){
+				addBurger(res, findBurger);
+			}else{
+				// updateBurger();
+			}
+		});
+}
+
+function addBurger(res, addBurger){
+	console.log(addBurger);
+	Model.burger
+		.build({
+			burger_name: addBurger,
+		})
+		.save()
+		.then(() => {
+			getBurgers(res);
+		});
+}
+
+function updateBurger(){
+// 	Model.burger
+// 		.update({
+// 			count
+// 		})
 }
 
 module.exports = router;
