@@ -8,12 +8,15 @@ block content
 	ul
 		each val in devouredBurgers
 			li= val
+			
 
 	p available
 
 	ul
 		each val in availableBurgers
 			li= val
+			form(name="delete-" + val method="post" action="/api/eat")
+				input(type="submit" value="Eat")
 
 	form(name="add-burger" method="post" action="/api/create")
 		label(for="burger-name") Add Burger:
