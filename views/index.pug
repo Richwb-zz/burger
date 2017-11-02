@@ -14,7 +14,7 @@ block content
 	ul
 		each val in availableBurgers
 			li= li= val[0] + " " + val[1]
-			form(name="delete-" + val method="post" action="/api/eat/" + val)
+			form(name="delete-" + val method="post" action="/api/eat/" + val[0])
 				input(type="submit" value="Eat")
 
 	form(name="add-burger" method="post" action="/api/addburger")
