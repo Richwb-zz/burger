@@ -5,14 +5,13 @@ var Model 	= require('../models/index.js');
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function(req, res, next) {
 	getBurgers(res);
 });
 
-router.post('/api/eat/:burgerate', function(req, res, next) {
-	var burgerAte = req['url'].replace('/api/eat/','');
-	burgerAte = decodeURI(burgerAte);
-	console.log(burgerAte);
+router.post("/api/eat/:burgerate", function(req, res, next) {
+	var burgerAte = decodeURI(req["url"].replace("/api/eat/",""));
+
 	Model.burger
 		.update(
 			{
@@ -27,7 +26,27 @@ router.post('/api/eat/:burgerate', function(req, res, next) {
 		});
 });
 
-function getBurgers(res){
+router.post("/api/addburger", function(req,res,next) {
+	var addBurger = req.body["burger-name"];
+	var burgerError = "";
+	
+	if(addBurger === ""){
+		burgerError = "Burger name cannot be blank";
+		getBurgers(res, burgerError);
+	}else{
+
+		Model.burger
+			.build({
+				burger_name: addBurger
+			})
+			.save()
+			.then(() => {
+				getBurgers(res, burgerError);
+			});
+	}
+});
+
+function getBurgers(res, burgerError=""){
 	var devouredBurgers  = [];
 	var availableBurgers = [];
 	var thisBurger;
@@ -47,7 +66,7 @@ function getBurgers(res){
 	  			}
 	  		}
   			
-  			res.render('index', {devouredBurgers : devouredBurgers, availableBurgers : availableBurgers});
+  			res.render("index", {devouredBurgers : devouredBurgers, availableBurgers : availableBurgers, burgerError : burgerError});
   		});
 }
 
