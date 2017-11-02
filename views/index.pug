@@ -7,14 +7,13 @@ block content
 	
 	ul
 		each val in devouredBurgers
-			li= val
-			
+			li= val[0] + " " + val[1]
 
 	p available
 
 	ul
 		each val in availableBurgers
-			li= val
+			li= li= val[0] + " " + val[1]
 			form(name="delete-" + val method="post" action="/api/eat/" + val)
 				input(type="submit" value="Eat")
 
