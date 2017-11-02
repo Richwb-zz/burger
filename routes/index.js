@@ -68,10 +68,9 @@ function getBurgers(res, burgerError=""){
 	  				devouredBurgers.push([burgerName, thisBurger.devoured]);
 	  			}
 
-	  			if(thisBurger.count > thisBurger.devoured){
-	  				var availableCount = thisBurger.count - thisBurger.devoured;
+	  			if(thisBurger.count > 0){
 	  				
-	  				availableBurgers.push([burgerName, availableCount]);
+	  				availableBurgers.push([burgerName, thisBurger.count]);
 	  			}
 	  		}
   			
