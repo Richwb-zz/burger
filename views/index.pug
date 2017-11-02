@@ -15,10 +15,10 @@ block content
 	ul
 		each val in availableBurgers
 			li= val
-			form(name="delete-" + val method="post" action="/api/eat")
+			form(name="delete-" + val method="post" action="/api/eat/" + val)
 				input(type="submit" value="Eat")
 
-	form(name="add-burger" method="post" action="/api/create")
+	form(name="add-burger" method="post" action="/api/addburger")
 		label(for="burger-name") Add Burger:
-		input(type="text",name="burger-name",value="")
+		input(type="text",name="burger-name",value="", required="required")
 		input(type="submit" value="submit")
